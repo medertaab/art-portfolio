@@ -1,0 +1,85 @@
+.hero-container {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  border: 1px solid red;
+}
+
+/* .carousel-container {
+  min-width: 100%;
+  display: flex;
+  overflow: hidden;
+  position: relative;
+}
+
+.carousel-item {
+  min-width: 100vw;
+  overflow: hidden;
+  position: absolute;
+  transition: transform 0.5s ease;
+}
+
+.carousel-item.prev {
+  transform: translateX(-100%);
+  z-index: -1;
+}
+
+.carousel-item.next {
+  transform: translateX(100%);
+  z-index: -1;
+}
+
+.carousel-item.current {
+  transform: translateX(0);
+  z-index: 2;
+} */
+
+.carousel-container {
+  overflow: hidden;
+  border: 1px solid green;
+  width: 300vw;
+}
+
+.inner {
+  white-space: nowrap;
+  transition: transform 0.3s;
+}
+
+.carousel-item {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  background-color: var(--default-grey);
+  color: #fff;
+}
+
+.carousel-buttons {
+  width: 100%;
+  height: 640px;
+  max-width: 800px;
+  z-index: 3;
+  position: absolute;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+  .carousel-button {
+    width: 3rem;
+    height: 3rem;
+    background-color: transparent;
+    border: none;
+    transition: opacity 0.1s ease-in-out;
+    opacity: 0.5;
+  }
+
+  .carousel-button--icon {
+    transform: scale(2.5);
+  }
+
+  .carousel-button:hover {
+    opacity: 1.0;
+    cursor: pointer;
+  }
+
