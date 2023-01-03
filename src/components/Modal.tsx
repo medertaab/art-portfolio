@@ -7,13 +7,16 @@ type Props = {
 
 export default function Modal(props: Props) {
   const [displayLink, setDisplayLink] = useState(props.link)
+  const [visibility, setVisibility] = useState('hidden')
   
-  const displayState = props.link ? "block" : "none"
+  let displayState = props.link ? "visible" : "hidden"
 
 
   return (
-    <div className='modal' style={{display: displayState}} onClick={props.closeModal}>
-      <img src={props.link}></img>
+    <div className={`modal ${displayState}`} onClick={props.closeModal}>
+      <div className="modal-container">
+        <img className={displayState} src={props.link}></img>
+      </div>
     </div>
   )
 }

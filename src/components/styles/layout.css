@@ -14,5 +14,11 @@ footer {
   background-color: var(--default-grey);
   display: flex;
   justify-content: center;
-  bottom: 0px;
+}
+
+@media (max-width: 800px) {
+  .layout {
+    display: flex;
+    flex-direction: column;
+  }
 }

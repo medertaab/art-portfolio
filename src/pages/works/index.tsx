@@ -1,16 +1,23 @@
 import React, { useState, useEffect } from "react";
 import { graphql, useStaticQuery } from "gatsby";
-import Layout from "../components/Layout";
-import CategoryTag from "../components/CategoryTag";
-import Modal from '../components/Modal'
-import "./works.css";
+import Layout from "../../components/Layout";
+import CategoryTag from "../../components/CategoryTag";
+import Modal from '../../components/Modal'
+import "./index.css";
 
-type Props = {};
 
-function Works({}: Props) {
+function Works(pageContext : Object) {
   const [currentCategory, setCurrentCategory] = useState("original");
   const [allImages, setAllImages] = useState();
   const [modalLink, setModalLink] = useState('')
+
+  useEffect(() => {
+    if (pageContext.pageContext.title) {
+      setCurrentCategory(pageContext.pageContext.title)
+    }
+  }, [])
+
+  console.log(pageContext)
 
   const imagesQuery = useStaticQuery(graphql`
     query MyQuery {
@@ -34,6 +41,7 @@ function Works({}: Props) {
           alt=""
           key={image.relativePath}
           onClick={openModal}
+          loading="lazy"
         ></img>
       );
     });
@@ -52,10 +60,11 @@ function Works({}: Props) {
       newCategory = e.target.getAttribute("data-category");
     }
     setCurrentCategory(newCategory);
+    window.history.pushState({}, '', `/works/${newCategory}`);
   }
 
   return (
-    <div>
+    <div className={`works-page ${modalLink ? 'locked' : ''}`}>
       <Modal link={modalLink} closeModal={closeModal}/>
       <Layout>
         <div className="category-tags">
@@ -63,20 +72,21 @@ function Works({}: Props) {
             onclick={changeCategory}
             name="Original work"
             category="original"
+            isActive={currentCategory == 'original' ? true : false}
           />
           <CategoryTag
             onclick={changeCategory}
             name="Client work"
             category="client"
+            isActive={currentCategory == 'client' ? true : false}
           />
           <CategoryTag
             onclick={changeCategory}
             name="Fan art"
             category="fanart"
+            isActive={currentCategory == 'fanart' ? true : false}
           />
         </div>
-
-        <p>{modalLink}</p>
 
         <div className="gallery">{gallery}</div>
       </Layout>

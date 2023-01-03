@@ -9,7 +9,7 @@ type Props = {
 export default function CategoryTag(props: Props) {
   return (
     <button
-      className="category-tag"
+      className={`category-tag ${props.isActive ? 'active' : ''}`}
       onClick={props.onclick}
       data-category={props.category}
     >

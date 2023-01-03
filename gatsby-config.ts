@@ -28,6 +28,18 @@ const config: GatsbyConfig = {
         name: `artwork`,
         path: `${__dirname}/static/artwork`
       }
+    },
+    {
+      resolve: `gatsby-omni-font-loader`,
+      options: {
+        enableListener: true,
+        web: [
+          {
+            name: `Switzer`,
+            file: `https://api.fontshare.com/v2/css?f[]=switzer@701,501,700,400,401,300,301,500&display=swap`,
+          },
+        ],
+      },
     }
    ]
 };

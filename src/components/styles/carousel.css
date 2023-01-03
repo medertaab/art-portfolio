@@ -2,10 +2,10 @@
   margin-top: 20px;
   display: flex;
   justify-content: center;
-  border: 1px solid red;
+  height: 640px;
 }
 
-/* .carousel-container {
+.carousel-container {
   min-width: 100%;
   display: flex;
   overflow: hidden;
@@ -32,26 +32,6 @@
 .carousel-item.current {
   transform: translateX(0);
   z-index: 2;
-} */
-
-.carousel-container {
-  overflow: hidden;
-  border: 1px solid green;
-  width: 300vw;
-}
-
-.inner {
-  white-space: nowrap;
-  transition: transform 0.3s;
-}
-
-.carousel-item {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-  background-color: var(--default-grey);
-  color: #fff;
 }
 
 .carousel-buttons {
