@@ -1,13 +1,23 @@
 @import url(https://fonts.googleapis.com/css?family=Raleway);
 
 header {
-  height: 80px;
+  width: 100%;
   background-color: var(--default-grey);
-  display: grid;
-  grid-template-columns: minmax(100px, 150px) 1fr minmax(100px, 150px);
+  position: sticky;
+  top: 0;
+  z-index: 4;
 }
 
-header > * {
+.header-container {
+  height: 80px;
+  width: 80%;
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(110px, 150px) 1fr minmax(110px, 150px);
+}
+
+.header-container > * {
   display: grid;
   place-items: center;
 }
@@ -27,36 +37,51 @@ header > * {
 
 nav {
   grid-area: 1 / 2 / 2 / 3;
+  display: flex;
+  justify-content: center;
 }
+
+.close-button {
+  display: none;
+}
+
 
 .navLinks-container {
   display: flex;
 }
 
-.navLink {
+.navLink, .navLink--side {
   border: none;
   background-color: var(--default-grey);
   font-size: 1rem;
   height: 2.5rem;
   width: 150px;
   transform: skewX(-17deg);
+  transition: background-color 0.1s ease-in-out;
 }
 
 .navLink > div {
   transform: skewX(17deg);
 }
 
-.navLink:hover {
+.navLink:hover, .navLink--side:hover {
   cursor: pointer;
-  background-image: url('https://cdna.artstation.com/p/assets/images/images/021/376/636/large/meder-taab-naruto-meder-taab.jpg');
+  background-color: var(--default-lime);
 }
 
-.socials {
+.navLink--side {
+  display: none;
+}
+
+.socials--top {
   grid-area: 1 / 3 / 2 / 4;
 }
 
+.socials--side {
+  display: none;
+}
+
 .socialLink {
-  /* aspect-ratio: 1 / 1; */
   border: none;
   background-color: transparent;
 }
@@ -65,15 +90,12 @@ nav {
   display: none;
 }
 
-@media (max-width: 800px) {
-  nav {
-    display: none;
-  }
-
+@media (max-width: 750px) {
   .menu-container{
     display: block;
     display: grid;
     grid-area: 1 / 1 / 2 / 2;
+    justify-content: left;
   }
 
   .menu-button--container {
@@ -106,6 +128,7 @@ nav {
     content: '';
     margin-top: 8px;
   }
+
   
   .logo {
     grid-area: 1 / 2 / 2 / 3;
@@ -113,5 +136,67 @@ nav {
 
   .socials {
     grid-area: 1 / 3 / 2 / 4;
+  }
+
+  nav {
+    display: block;
+    z-index: 5;
+    position: absolute;
+    height: 100vh;
+    width: 400px;
+    max-width: 65%;
+    background-color: var(--default-grey);
+    box-shadow: 0px 0px 5px 3px rgba(0, 0, 0, 0.288);
+    left: -100%;
+    transition: left 0.2s ease-in-out;
+  }
+
+  nav.open {
+    display: block;
+    left: 0;
+    transition: left 0.2s ease-in-out;
+  }
+
+  .close-button {
+    display: block;
+    position: absolute;
+    right: 0;
+    margin: 20px;
+    border: none;
+    font-size: 1.7rem;
+    background-color: transparent;
+    cursor: pointer;
+  }
+
+  .navLinks-container {
+    display: flex;
+    flex-direction: column;
+    margin-top: 100px;
+    width: 100%;
+  }
+
+
+  .navLink, .navLink--side {
+    font-size: 1.3rem;
+    margin: 10px 0;
+  }
+  
+  .navLink--side {
+    display: inline;
+  }
+
+  .navLink:hover {
+    cursor: pointer;
+    background-color: transparent;
+  }
+
+  .socials--top {
+    display: none;
+  }
+
+  .socials--side {
+    display: block;
+    transform: scale(150%);
+    margin-top: 50px;
   }
 }

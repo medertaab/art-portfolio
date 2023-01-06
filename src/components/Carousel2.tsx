@@ -6,19 +6,22 @@ import "./styles/carousel.css";
 export default function Carousel() {
   const [slideId, setSlideId] = useState(0);
   const numOfSlides = heroImageData.length;
-
-  const timer = useRef(3)
-
-
+  const [isScrolling, setIsScrolling] = useState(true);
 
   function handleRightClick() {
+    setIsScrolling(false);
     scrollRight();
-    timer.current = 3;
+    setTimeout(() => {
+      setIsScrolling(true);
+    }, 5000);
   }
 
   function handleLeftClick() {
+    setIsScrolling(false);
     scrollLeft();
-    timer.current = 3;
+    setTimeout(() => {
+      setIsScrolling(true);
+    }, 5000);
   }
 
   function scrollRight() {
@@ -34,6 +37,17 @@ export default function Carousel() {
       else return prev - 1;
     });
   }
+
+  function autoScroll() {
+    useEffect(() => {
+      const timeout = setTimeout(() => {
+        scrollRight();
+      }, 5000);
+      if (!isScrolling) clearTimeout(timeout);
+    }, [slideId, isScrolling]);
+  }
+
+  autoScroll();
 
   return (
     <section className="hero-container">

@@ -1,94 +1,126 @@
 import React, { useState, useEffect } from "react";
-import { graphql, useStaticQuery } from "gatsby";
 import Layout from "../../components/Layout";
 import CategoryTag from "../../components/CategoryTag";
-import Modal from '../../components/Modal'
+import Modal from "../../components/Modal";
+import Gallery from "../../components/Gallery";
 import "./index.css";
+import { graphql, useStaticQuery } from "gatsby";
 
-
-function Works(pageContext : Object) {
+function Works(pageContext: Object) {
   const [currentCategory, setCurrentCategory] = useState("original");
-  const [allImages, setAllImages] = useState();
-  const [modalLink, setModalLink] = useState('')
+  const [modalLink, setModalLink] = useState("");
+  const [modalLength, setModalLength] = useState(0);
+  const [modalData, setModalData] = useState([])
 
+  const categories = [
+    { category: "original", title: "Original work" },
+    { category: "client", title: "Client work" },
+    { category: "fanart", title: "Fan art" },
+  ];
+
+  // Set category from URL
   useEffect(() => {
     if (pageContext.pageContext.title) {
-      setCurrentCategory(pageContext.pageContext.title)
+      setCurrentCategory(pageContext.pageContext.title);
     }
-  }, [])
+  }, []);
 
-  console.log(pageContext)
-
+  // Get all files from artwork directory
   const imagesQuery = useStaticQuery(graphql`
     query MyQuery {
-      allFile(filter: { relativeDirectory: {} }) {
+      allFile {
         nodes {
           relativePath
+          relativeDirectory
+        }
+        group(field: { relativeDirectory: SELECT }) {
+          nodes {
+            relativeDirectory
+            relativePath
+          }
         }
       }
     }
   `);
 
-  const imagesData = imagesQuery.allFile.nodes;
+  // Filter only current category
+  const data = imagesQuery.allFile.group.filter((group) =>
+    group.nodes[0].relativeDirectory.startsWith(currentCategory)
+  );
 
-  const gallery = imagesData
-    .filter((image: any) => image.relativePath.startsWith(currentCategory))
-    .map((image: { relativePath: string }) => {
-      return (
-        <img
-          className="gallery--thumbnail"
-          src={`/artwork/${image.relativePath}`}
-          alt=""
-          key={image.relativePath}
-          onClick={openModal}
-          loading="lazy"
-        ></img>
-      );
-    });
+  console.log('data', data)
 
-    function openModal(e: any) {
-      setModalLink(e.target.src)
+  // Merge single and multiple image objects
+  const dataMerged = data.reduce((acc, val) => {
+    if (val.nodes[0].relativeDirectory == currentCategory) {
+      val.nodes.map((item) => {
+        item.multiple = false;
+        acc.push(item);
+      });
+    } else {
+      const multipleObject = val.nodes.reduce((acc, val) => {
+        if (!acc.relativePaths) {
+          acc.relativePaths = [val.relativePath];
+        } else {
+          acc.relativePaths.push(val.relativePath);
+        }
+        acc.multiple = true;
+        return acc;
+      }, {});
+      return [multipleObject, ...acc];
     }
+    return acc;
+  }, []);
 
-    function closeModal() {
-      setModalLink('')
-    }
+  console.log('datamerged', dataMerged)
 
-    function changeCategory(e: PointerEvent) {
+
+  function openModal(e: any) {
+    setModalLink(e.target.src);
+    setModalLength(
+      e.target.getAttribute("data-length")
+        ? e.target.getAttribute("data-length")
+        : 1
+    );
+  }
+
+  function closeModal() {
+    setModalLink("");
+  }
+
+  function changeCategory(e: PointerEvent) {
     let newCategory = "";
     if (e.target) {
       newCategory = e.target.getAttribute("data-category");
     }
-    setCurrentCategory(newCategory);
-    window.history.pushState({}, '', `/works/${newCategory}`);
+    setCurrentCategory(newCategory)
+    
+    window.history.pushState({}, "", `/works/${newCategory}`);
   }
 
   return (
-    <div className={`works-page ${modalLink ? 'locked' : ''}`}>
-      <Modal link={modalLink} closeModal={closeModal}/>
+    <div className={`works-page ${modalLink ? "locked" : ""}`}>
+      <Modal
+        link={modalLink}
+        closeModal={closeModal}
+        modalLength={modalLength}
+      />
+
       <Layout>
         <div className="category-tags">
-          <CategoryTag
-            onclick={changeCategory}
-            name="Original work"
-            category="original"
-            isActive={currentCategory == 'original' ? true : false}
-          />
-          <CategoryTag
-            onclick={changeCategory}
-            name="Client work"
-            category="client"
-            isActive={currentCategory == 'client' ? true : false}
-          />
-          <CategoryTag
-            onclick={changeCategory}
-            name="Fan art"
-            category="fanart"
-            isActive={currentCategory == 'fanart' ? true : false}
-          />
+          {categories.map((category) => {
+            return (
+              <CategoryTag
+                onclick={changeCategory}
+                name={category.title}
+                category={category.category}
+                isActive={currentCategory == category.category ? true : false}
+              />
+            );
+          })}
         </div>
 
-        <div className="gallery">{gallery}</div>
+        <Gallery openModal={openModal} currentCategory={currentCategory} dataMerged={dataMerged}/>
       </Layout>
     </div>
   );

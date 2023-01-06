@@ -1,13 +1,27 @@
 .category-card {
-  width: 400px;
+  max-width: 400px;
+  width: 100vw;
   height: 250px;
   display: grid;
   place-items: center;
-  background-image: url('https://64.media.tumblr.com/439dc805ead0fc6c860b88dfac846036/e349ead0b1cbb51c-5a/s1280x1920/50976e83645179347a5b0970f66f8ac95e54a81a.jpg');
   background-size: cover;
+  background-repeat: no-repeat;
   background-position: center;
   font-size: 1rem;
   transition: font-size ease-in-out 0.1s;
+  transition: background-size ease-in-out 0.2s;
+  border: none;
+  background-size: 100%;
+}
+
+.category-card.original {
+  background-image: url('/categories/category_original.jpg');
+}
+.category-card.client {
+  background-image: url('/categories/category_client.jpg');
+}
+.category-card.fanart {
+  background-image: url('/categories/category_fanart.jpg');
 }
 
 .category-card > h2 {
@@ -16,7 +30,9 @@
 }
 
 .category-card:hover {
-  font-size: 1.1rem;
+  font-size: 105%;
   cursor: pointer;
+  background-size: 102%;
+  transition: font-size ease-in-out 0.1s;
   /* background-image: url('./assets/categories/fanart_animated.gif') */
 }

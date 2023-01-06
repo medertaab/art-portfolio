@@ -1,18 +1,27 @@
 import { Link, graphql, useStaticQuery } from "gatsby";
-import React from "react";
+import React, { useState } from "react";
 import "./styles/header.css";
-import { StaticImage } from "gatsby-plugin-image";
+import Socials from "./Socials";
 
 type Props = {};
 
 export default function Header({}: Props) {
+  const [sideMenu, setSideMenu] = useState(false);
+
+  function openSideMenu() {
+    setSideMenu(true);
+  }
+
+  function closeSideMenu() {
+    setSideMenu(false);
+  }
+
   return (
-    <div className="header">
-      <header>
-        <div className="menu-container">
+    <header>
+      <div className="header-container">
+        <div className="menu-container" onClick={openSideMenu}>
           <div className="menu-button--container">
-            <div className="menu-button">
-            </div>
+            <div className="menu-button"></div>
           </div>
         </div>
 
@@ -22,8 +31,15 @@ export default function Header({}: Props) {
           </Link>
         </div>
 
-        <nav>
+        <nav className={sideMenu ? "open" : ""}>
+          <button className="close-button" onClick={closeSideMenu}>
+            X
+          </button>
           <div className="navLinks-container">
+            <Link to="/">
+              <button className="navLink navLink--side">Home</button>
+            </Link>
+
             <Link to="/about">
               <button className="navLink">About</button>
             </Link>
@@ -36,41 +52,15 @@ export default function Header({}: Props) {
               <button className="navLink">Contact</button>
             </Link>
           </div>
+          <div className="socials--side">
+            <Socials />
+          </div>
         </nav>
 
-        <div className="socials">
-          <div className="socials-container">
-            <button className="socialLink">
-              <a href="http://twitter.com/medertaab">
-                <img
-                  src="/icons/twitter-fill.svg"
-                  alt="Twitter logo"
-                  placeholder="none"
-                />
-              </a>
-            </button>
-
-            <button className="socialLink">
-              <a href="http://instagram.com/medertaab">
-                <img
-                  src="/icons/instagram-fill.svg"
-                  alt="Instagram logo"
-                  placeholder="none"
-                />
-              </a>
-            </button>
-            <button className="socialLink">
-              <a href="http://twitter.com/medertaab">
-                <img
-                  src="/icons/youtube-fill.svg"
-                  alt="Youtube logo"
-                  placeholder="none"
-                />
-              </a>
-            </button>
-          </div>
+        <div className="socials--top">
+          <Socials />
         </div>
-      </header>
-    </div>
+      </div>
+    </header>
   );
 }
