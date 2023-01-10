@@ -1,9 +1,27 @@
+.light {
+  --default-black: rgb(17, 17, 17);
+  --default-white: rgb(243, 243, 243);
+  --default-grey: #e7e7e7;
+  --default-beige: #e5e4e0;
+  --default-lime: #b2ca12;
+}
+
+.dark {
+  --default-black: #e5e4e0;
+  --default-white: rgb(41, 41, 41);
+  --default-grey: #363636;
+  --default-beige: #424242;
+  --default-lime: #b2ca12;
+}
+
 .layout {
   min-height: 100vh;
   position: relative;
+  background-color: var(--default-white);
 }
 
-.content {
+* {
+  color: var(--default-black)
 }
 
 p {

@@ -1,6 +1,6 @@
 import { Link, graphql, useStaticQuery } from "gatsby";
 import React, { useState } from "react";
-import "./styles/header.css";
+import "../styles/header.css";
 import Socials from "./Socials";
 
 type Props = {};

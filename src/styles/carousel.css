@@ -34,6 +34,9 @@
   z-index: 2;
 }
 
+.curr-slide {
+}
+
 .carousel-buttons {
   width: 95%;
   height: 640px;

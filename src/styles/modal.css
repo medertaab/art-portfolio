@@ -1,0 +1,63 @@
+.modal.visible {
+  z-index: 5;
+  visibility: visible;
+  background-color: rgba(255, 255, 255, 0.77);
+  position: fixed;
+  height: 100vh;
+  min-width: 100vw;
+  overflow-y: scroll;
+  display: flex;
+  justify-content: center;
+  
+}
+
+.modal.hidden {
+  visibility: hidden;
+  background-color: rgba(255, 255, 255, 0);
+  position: fixed;
+}
+
+.modal-image--container {
+  box-sizing: border-box;
+  min-height: 100vh;
+  width: fit-content;
+  height: fit-content;
+  display: grid;
+  place-items: center;
+  padding: 20px 0;
+  position: relative;
+  overscroll-behavior: contain;
+}
+
+.modal img {
+  max-width: 80vw;
+  max-height: 80vh;
+  margin: 0 30px;
+  padding: 20px 0;
+}
+
+.modal--close-button {
+  height: 2.5rem;
+  width: 2.5rem;
+  font-size: 2rem;
+  border-radius: 50%;
+  border: none;
+  background-color: var(--default-grey);
+  transition: background-color 0.1s ease-in-out;
+  position: sticky;
+  top: 50px;
+  margin-right: -2.5rem;
+  justify-self: end;
+}
+
+.modal--close-button:hover {
+  background-color: var(--default-lime);
+  transition: background-color 0.1s ease-in-out;
+  cursor: pointer;
+}
+
+@media (max-width: 750px) {
+  .modal--close-button {
+    display: none;
+  }
+}

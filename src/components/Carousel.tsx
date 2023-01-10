@@ -1,15 +1,13 @@
 import React, { useState, useRef, useEffect } from "react";
 import Slide from "./Slide";
 import heroImageData from "../assets/heroImageData";
-import "./styles/carousel.css";
+import "../styles/carousel.css";
 
 export default function Carousel() {
   const [slideId, setSlideId] = useState(0);
   const numOfSlides = heroImageData.length;
 
-  const timer = useRef(3)
-
-
+  const timer = useRef(3);
 
   function handleRightClick() {
     scrollRight();
@@ -68,8 +66,9 @@ export default function Carousel() {
             className={`carousel-item ${
               index < slideId ? "prev" : index > slideId ? "next" : "current"
             }`}
+            key={index}
           >
-            <Slide data={item} index={slideId} />
+            <Slide data={item} />
           </div>
         ))}
       </div>

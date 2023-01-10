@@ -3,20 +3,20 @@ import Layout from "../../components/Layout";
 import CategoryTag from "../../components/CategoryTag";
 import Modal from "../../components/Modal";
 import Gallery from "../../components/Gallery";
-import "./index.css";
+import categories from "../../assets/categories";
+import "../../styles/worksPage.css";
 import { graphql, useStaticQuery } from "gatsby";
+import type { HeadFC } from "gatsby";
+import HeadData from "../../components/HeadData";
 
-function Works(pageContext: Object) {
-  const [currentCategory, setCurrentCategory] = useState("original");
-  const [modalLink, setModalLink] = useState("");
-  const [modalLength, setModalLength] = useState(0);
-  const [modalData, setModalData] = useState([])
+interface ContextObject {
+  pageContext: {title: string}
+}
 
-  const categories = [
-    { category: "original", title: "Original work" },
-    { category: "client", title: "Client work" },
-    { category: "fanart", title: "Fan art" },
-  ];
+function Works(pageContext: ContextObject) {
+  const [currentCategory, setCurrentCategory] = useState(categories[0].category);
+  const [modalOpen, setModalOpen] = useState(false)
+  const [modalData, setModalData] = useState('')
 
   // Set category from URL
   useEffect(() => {
@@ -33,59 +33,42 @@ function Works(pageContext: Object) {
           relativePath
           relativeDirectory
         }
-        group(field: { relativeDirectory: SELECT }) {
-          nodes {
-            relativeDirectory
-            relativePath
-          }
-        }
       }
     }
   `);
 
-  // Filter only current category
-  const data = imagesQuery.allFile.group.filter((group) =>
-    group.nodes[0].relativeDirectory.startsWith(currentCategory)
-  );
 
-  console.log('data', data)
+  // Separate data by categories
+  const dataSeparated = imagesQuery.allFile.nodes.reduce((acc, val) => {
+    let root = val.relativeDirectory.split('/')[0]
+    if (!acc[root]) {
+      acc[root] = [val]
+    } else {
+      acc[root] = [...acc[root], val]
+    }
+    return acc
+  }, {})
 
   // Merge single and multiple image objects
-  const dataMerged = data.reduce((acc, val) => {
-    if (val.nodes[0].relativeDirectory == currentCategory) {
-      val.nodes.map((item) => {
-        item.multiple = false;
-        acc.push(item);
-      });
-    } else {
-      const multipleObject = val.nodes.reduce((acc, val) => {
-        if (!acc.relativePaths) {
-          acc.relativePaths = [val.relativePath];
-        } else {
-          acc.relativePaths.push(val.relativePath);
-        }
-        acc.multiple = true;
-        return acc;
-      }, {});
-      return [multipleObject, ...acc];
-    }
-    return acc;
-  }, []);
+  let dataGrouped = {}
+  Object.keys(dataSeparated).forEach(category => {
+    let data = dataSeparated[category].reduce((acc, val) => {
+      const folder = val.relativeDirectory.replace(`${category}/`, '')
+      acc[folder] = acc[folder] || []
+      acc[folder].push(val.relativePath)
+      return acc
+    }, {})
+    dataGrouped[category] = data
+  })
 
-  console.log('datamerged', dataMerged)
 
 
   function openModal(e: any) {
-    setModalLink(e.target.src);
-    setModalLength(
-      e.target.getAttribute("data-length")
-        ? e.target.getAttribute("data-length")
-        : 1
-    );
+    setModalOpen(true)
   }
 
   function closeModal() {
-    setModalLink("");
+    setModalOpen(false)
   }
 
   function changeCategory(e: PointerEvent) {
@@ -96,14 +79,23 @@ function Works(pageContext: Object) {
     setCurrentCategory(newCategory)
     
     window.history.pushState({}, "", `/works/${newCategory}`);
+    scrollToTop()
+  }
+
+  function scrollToTop() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function setModal(data : object | string) {
+    setModalData(data)
   }
 
   return (
-    <div className={`works-page ${modalLink ? "locked" : ""}`}>
+    <div className={`works-page ${modalOpen ? "locked" : ""}`}>
       <Modal
-        link={modalLink}
         closeModal={closeModal}
-        modalLength={modalLength}
+        modalOpen={modalOpen}
+        modalData={modalData}
       />
 
       <Layout>
@@ -115,15 +107,25 @@ function Works(pageContext: Object) {
                 name={category.title}
                 category={category.category}
                 isActive={currentCategory == category.category ? true : false}
+                key={category.title}
               />
             );
           })}
         </div>
 
-        <Gallery openModal={openModal} currentCategory={currentCategory} dataMerged={dataMerged}/>
+        
+
+        <Gallery openModal={openModal} currentCategory={currentCategory} data={dataGrouped[currentCategory]} setModal={setModal}/>
+      
+        <button className="back-top" onClick={scrollToTop}><span>↑</span></button>
+      
       </Layout>
     </div>
   );
 }
 
 export default Works;
+
+export const Head: HeadFC = function () {
+  return <HeadData title="Works" />;
+};

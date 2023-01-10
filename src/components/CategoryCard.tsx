@@ -1,13 +1,13 @@
 import { Link } from "gatsby";
 import React from "react";
-import "./styles/category.css";
+import "../styles/category.css";
 
 type Props = {
   name: string;
   category: string;
 };
 
-export default function Category(data: Props) {
+export default function CategoryCard(data: Props) {
   return (
     <Link to={`/works/${data.category}`}>
       <button className={`category-card ${data.category}`} data-cat={data.category}>

@@ -1,6 +1,0 @@
-.curr-slide {
-  max-height: 640px;
-  max-width: 100vw;
-  display: grid;
-  place-content: center;
-}

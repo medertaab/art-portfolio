@@ -1,38 +1,24 @@
 import React from "react";
-import { graphql, useStaticQuery } from "gatsby";
+import Thumbnail from "./Thumbnail";
 
-export default function Gallery({ openModal, currentCategory, dataMerged }) {
-  
- 
+type Props = {
+  data: any,
+  currentCategory: string,
+  setModal: Function,
+  openModal: Function
+}
 
-  const gallery = dataMerged.map((image) => {
-    if (!image.multiple) {
-      return (
-        <div className="gallery--thumbnail-container">
-          <img
-            className="gallery--thumbnail"
-            src={`/artwork/${image.relativePath}`}
-            alt=""
-            key={image.relativePath}
-            onClick={openModal}
-            loading="lazy"
-          />
-        </div>
-      );
+export default function Gallery(props: Props) {
+  const { data, currentCategory, setModal, openModal } = props
+  const gallery = Object.keys(data).map((object) => {
+    // If object is root and contains all singular posts 
+    if (object == currentCategory) {
+      return data[object].map((image: string) => {
+        return <Thumbnail link={image} data={image} setModal={setModal} openModal={openModal} key={image}/>
+      });
+    // If object is a post with multiple images
     } else {
-      return (
-        <div className="gallery--thumbnail-container multiple">
-          <img
-            className="gallery--thumbnail"
-            src={`/artwork/${image.relativePaths[0]}`}
-            alt=""
-            key={image.relativePath}
-            onClick={openModal}
-            loading="lazy"
-            data-length={`${image.relativePaths.length}`}
-          />
-        </div>
-      );
+      return <Thumbnail link={data[object][0]} data={data[object]} setModal={setModal} openModal={openModal} key={data[object][0]}/>
     }
   });
 

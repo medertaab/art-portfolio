@@ -3,7 +3,8 @@ import React from "react";
 type Props = {
   name: string;
   category: string;
-  onclick: object
+  onclick: any,
+  isActive: boolean,
 };
 
 export default function CategoryTag(props: Props) {

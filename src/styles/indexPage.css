@@ -9,20 +9,13 @@
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
 
+  overflow-x: hidden;
+
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  -webkit-text-size-adjust: 100%;
-
-  --default-small-screen: 800px;
-
-  --default-black: rgb(17, 17, 17);
-  --default-white: rgb(243, 243, 243);
-  --default-grey: #e7e7e7;
-  --default-beige: #e5e4e0;
-  --default-lime: #b2ca12;
-
+  -webkit-text-size-adjust: 100%;  
 }
 
 body {
